@@ -14,15 +14,37 @@
   <script src="./tutti_alberi.js"></script>
   <script src="./prova_alberi.js"></script>
   <style>
-    #map { height: 600px; }
+	  
+    #map { 
+      height: 600px; 
+    }
+	  
+    .heading {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    body {
+      font-family: "Verdana";
+    }
+	  
   </style>
 </head>
 <body>
+	
+  <div class="heading">
+    <h1> Map of Verona city trees </h1>
+    <p>Urban trees in the Municipality of Verona, based on OpenData provided</p>
+    <p>Different colors indicate different species, each marker (circle) indicates a tree. Marker size roughly proportional to tree diameter class.</p>
+    <p>Red markers indicate unidentified trees (14th named species).</p>
+    <p>Displayed trees are the most common 42 species, to see all of them enable "Altro" in the layer control</p>
+  </div>
+	
   <div id="map"></div>
 
   <script>
-
-  // MANCA IL LAYER "ALTRO", FARE SOTTRAZIONE AL geoJSON
 
   const nomeSpecieComuni = [
   'Tilia Europaea',
@@ -79,8 +101,7 @@
     attribution: '© OpenStreetMap'
   });
 
-/* var treesData = L.geoJSON(prova_alberi_data);*/
-
+// Custom function to bind popup to each marker
   function onEachFeature(feature, layer) {
 		let popupContent = `<strong>SPECIE:</strong> ${feature.properties.DESCRIZION}</br><strong>DIAMETRO:</strong> ${feature.properties.DIAMETRO_F}`;
 		if (feature.properties && feature.properties.popupContent) {
@@ -145,7 +166,7 @@
   };
 
 /*
-//WORKING
+//Bulk add all trees and filter single species
   var trees = L.geoJSON(alberi, {
     filter: function(feature, layer) {
       return feature.properties.DESCRIZION == nomeSpecieComuni[2];
@@ -158,7 +179,6 @@
   });
 */
 
-//NOT WORKING
 var trees = [];
 
 for (let specie in nomeSpecieComuni) {
@@ -175,17 +195,17 @@ for (let specie in nomeSpecieComuni) {
     }));
   };
 
-// le ALTRE specie sono raggruppate in un altro layer
+// OTHER species are grouped together in another layer
   var altreSpecie = L.geoJSON(altro, {
     onEachFeature,
     pointToLayer: function (feature, latlng) {
-      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+4; // Raggio del cerchio proporzionale alla classe di diametro del tronco
+      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+4; // Marker radius roughly proportional to tree trunk diameter class
       geojsonMarkerOptions.fillColor = "#FFFFFF";
       return L.circleMarker(latlng, geojsonMarkerOptions);
     }
   });
 
-// USARE LAYERGROUP PER RAGGRUPPARE I LAYERS E AGGIUNGERLI ALLA MAPPA
+// Use layergroup to add them to the map
 var gruppoAlberi = L.layerGroup(trees);
 var gruppoAltro = L.layerGroup(altro);
 
@@ -200,7 +220,7 @@ var gruppoAltro = L.layerGroup(altro);
     "CARTODB dark": base
   }
 
-// CAPIRE COME FARE OVERLAY SEPARATI PER SPECIE
+// TODO: how to provide controls for the 42 most common species?
   var overlayMaps = {
     "Specie": gruppoAlberi,
     "Altro": altreSpecie
