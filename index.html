@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Mappa alberi Verona</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+     integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+     crossorigin=""/>
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+    integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+    crossorigin="">
+  </script>
+  <script src="./tutti_alberi.js"></script>
+  <script src="./prova_alberi.js"></script>
+  <style>
+    #map { height: 600px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+
+  // MANCA IL LAYER "ALTRO", FARE SOTTRAZIONE AL geoJSON
+
+  const nomeSpecieComuni = [
+  'Tilia Europaea',
+  'Platanus Acerifolia',
+  'Cupressus Sempervirens',
+  'Pinus Pinea',
+  'Cedrus Deodara',
+  'Cercis Siliquastrum',
+  'Aesculus Hippocastanum',
+  'Quercus Ilex',
+  'Robinia Pseudoacacia',
+  'Carpinus Betulus',
+  'Liriodendron Tulipifera',
+  'Ginkgo Biloba',
+  'Acer Negundo',
+  '-',
+  'Sophora Japonica',
+  'Ulmus Pumila',
+  'Acer Pseudoplatanus',
+  "Carpinus Betulus 'Pyramidalis'",
+  'Acer Platanoides',
+  'Celtis Australis',
+  'Ulmus Minor',
+  'Tilia Platyphyllos',
+  'Fraxinus Excelsior',
+  'Magnolia Grandiflora',
+  'Ostrya Carpinifolia',
+  "Populus Nigra 'Italica'",
+  'Acer Saccharinum',
+  'Tilia Cordata',
+  'Ulmus Sp',
+  'Cedrus Atlantica',
+  'Tamarix Gallica',
+  'Firmiana Simplex',
+  'Pinus Nigra',
+  'Tilia Tomentosa',
+  'Fraxinus Ornus',
+  "Quercus Robur 'Fastigiata'",
+  'Taxus Baccata',
+  'Olea Europaea',
+  'Prunus Sp',
+  "Cedrus Atlantica 'Glauca'",
+  'Quercus Pedunculata',
+  'Pinus Sp'
+  ];
+
+  var base = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+  });
+
+  var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  });
+
+/* var treesData = L.geoJSON(prova_alberi_data);*/
+
+  function onEachFeature(feature, layer) {
+		let popupContent = `<strong>SPECIE:</strong> ${feature.properties.DESCRIZION}</br><strong>DIAMETRO:</strong> ${feature.properties.DIAMETRO_F}`;
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	};
+
+  var colors = [
+    "#31f988",
+    "#5fe2c8",
+    "#38d1c6",
+    "#51dd44",
+    "#3fc66c",
+    "#1ff44d",
+    "#17aa43",
+    "#ccdb4a",
+    "#2edd7d",
+    "#b8dd3e",
+    "#55e542",
+    "#3ce867",
+    "#60e0d5",
+    "#ff0000",//"#bbf450",
+    "#adcc14",
+    "#55f4e7",
+    "#35fca9",
+    "#61f98a",
+    "#2abf83",
+    "#2aaf39",
+    "#1ef916",
+    "#32d134",
+    "#128c3a",
+    "#6aa819",
+    "#aab20a",
+    "#5cf99b",
+    "#c6ff38",
+    "#a1ad1a",
+    "#46c9b1",
+    "#8fc647",
+    "#34c139",
+    "#7ad822",
+    "#86db62",
+    "#0f8c24",
+    "#55d657",
+    "#65f79f",
+    "#45d33b",
+    "#2edd48",
+    "#1daf49",
+    "#9dd83e",
+    "#e7f91b",
+    "#71fcec"
+  ];
+
+  var geojsonMarkerOptions = {
+    fillColor: "#685",
+    color: "none",
+    radius: 5, // Valore di default
+    weight: 1,
+    opacity: 0.8,
+    fillOpacity: 0.8
+  };
+
+/*
+//WORKING
+  var trees = L.geoJSON(alberi, {
+    filter: function(feature, layer) {
+      return feature.properties.DESCRIZION == nomeSpecieComuni[2];
+    },
+    onEachFeature,
+    pointToLayer: function (feature, latlng) {
+      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+6; // Raggio del cerchio proporzionale alla classe di diametro del tronco
+      return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+  });
+*/
+
+//NOT WORKING
+var trees = [];
+
+for (let specie in nomeSpecieComuni) {
+    trees.push(L.geoJSON(alberi, {
+      pointToLayer: function (feature, latlng) {
+        geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+4; // Raggio del cerchio proporzionale alla classe di diametro del tronco
+        geojsonMarkerOptions.fillColor = colors[specie]
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+      onEachFeature,
+      filter: function (feature, layer) {
+        return feature.properties.DESCRIZION === nomeSpecieComuni[specie];
+      }
+    }));
+  };
+
+// le ALTRE specie sono raggruppate in un altro layer
+  var altreSpecie = L.geoJSON(altro, {
+    onEachFeature,
+    pointToLayer: function (feature, latlng) {
+      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+4; // Raggio del cerchio proporzionale alla classe di diametro del tronco
+      geojsonMarkerOptions.fillColor = "#FFFFFF";
+      return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+  });
+
+// USARE LAYERGROUP PER RAGGRUPPARE I LAYERS E AGGIUNGERLI ALLA MAPPA
+var gruppoAlberi = L.layerGroup(trees);
+var gruppoAltro = L.layerGroup(altro);
+
+  var map = L.map('map', {
+    center: [45.448, 11],
+    zoom: 12,
+    layers: [base, gruppoAlberi]
+  });
+
+  var baseMaps = {
+    "OpenStreetMap": osm,
+    "CARTODB dark": base
+  }
+
+// CAPIRE COME FARE OVERLAY SEPARATI PER SPECIE
+  var overlayMaps = {
+    "Specie": gruppoAlberi,
+    "Altro": altreSpecie
+  };
+
+  var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+  </script>
+</body>
+</html>
