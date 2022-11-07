@@ -39,7 +39,7 @@
     <p>Urban trees in the Municipality of Verona, based on OpenData provided</p>
     <p>Different colors indicate different species, each marker (circle) indicates a tree. Marker size roughly proportional to tree diameter class.</p>
     <p>Red markers indicate unidentified trees (14th named species).</p>
-    <p>Displayed trees are the most common 42 species, to see all of them enable "Altro" in the layer control</p>
+    <p>Displayed trees are the most common 42 species colored by species, in white all species with less than 50 trees</p>
   </div>
 	
   <div id="map"></div>
@@ -159,7 +159,7 @@
   var geojsonMarkerOptions = {
     fillColor: "#685",
     color: "none",
-    radius: 5, // Valore di default
+    radius: 5, // default value
     weight: 1,
     opacity: 0.8,
     fillOpacity: 0.8
@@ -167,6 +167,7 @@
 
 /*
 //Bulk add all trees and filter single species
+// OLD VERSION
   var trees = L.geoJSON(alberi, {
     filter: function(feature, layer) {
       return feature.properties.DESCRIZION == nomeSpecieComuni[2];
@@ -205,14 +206,23 @@ for (let specie in nomeSpecieComuni) {
     }
   });
 
+// DICTIONARY COMPREHENSION
+var treesDict = {};
+
+for (let i = 0; i < 42; i++) {
+  treesDict[nomeSpecieComuni[i]] = trees[i];
+};
+
+treesDict['Altro'] = altreSpecie;
+
+
 // Use layergroup to add them to the map
 var gruppoAlberi = L.layerGroup(trees);
-var gruppoAltro = L.layerGroup(altro);
 
   var map = L.map('map', {
     center: [45.448, 11],
     zoom: 12,
-    layers: [base, gruppoAlberi]
+    layers: [base, altreSpecie, gruppoAlberi]
   });
 
   var baseMaps = {
@@ -220,13 +230,8 @@ var gruppoAltro = L.layerGroup(altro);
     "CARTODB dark": base
   }
 
-// TODO: how to provide controls for the 42 most common species?
-  var overlayMaps = {
-    "Specie": gruppoAlberi,
-    "Altro": altreSpecie
-  };
-
-  var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+// Using treesDict as layer controls
+  var layerControl = L.control.layers(baseMaps, treesDict).addTo(map);
 
   </script>
 </body>
