@@ -36,10 +36,10 @@
 	
   <div class="heading">
     <h1> Map of Verona city trees </h1>
-    <p>Urban trees in the Municipality of Verona, based on OpenData provided</p>
+    <p>Urban trees in the Municipality of Verona, based on OpenData provided by the Municipality<a href="https://mapserver6.comune.verona.it/SiGi/M1/IGIS.aspx">SiGi</a></p>
     <p>Different colors indicate different species, each marker (circle) indicates a tree. Marker size roughly proportional to tree diameter class.</p>
-    <p>Red markers indicate unidentified trees (14th named species).</p>
-    <p>Displayed trees are the most common 42 species colored by species, in white all species with less than 50 trees</p>
+    <p>Red markers indicate unidentified trees (14th most common tree group).</p>
+    <p>Displayed trees are the most common 42 species colored by species, in white all species with less than 50 trees (117 species)</p>
   </div>
 	
   <div id="map"></div>
@@ -103,7 +103,7 @@
 
 // Custom function to bind popup to each marker
   function onEachFeature(feature, layer) {
-		let popupContent = `<strong>SPECIE:</strong> ${feature.properties.DESCRIZION}</br><strong>DIAMETRO:</strong> ${feature.properties.DIAMETRO_F}`;
+		let popupContent = `<strong>ID PIANTA:</strong> ${feature.properties.CODICE_PIA}</br><strong>SPECIE:</strong> ${feature.properties.DESCRIZION}</br><strong>DIAMETRO:</strong> ${feature.properties.DIAMETRO_F}`;
 		if (feature.properties && feature.properties.popupContent) {
 			popupContent += feature.properties.popupContent;
 		}
@@ -185,7 +185,7 @@ var trees = [];
 for (let specie in nomeSpecieComuni) {
     trees.push(L.geoJSON(alberi, {
       pointToLayer: function (feature, latlng) {
-        geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+4; // Raggio del cerchio proporzionale alla classe di diametro del tronco
+        geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+5; // Raggio del cerchio proporzionale alla classe di diametro del tronco
         geojsonMarkerOptions.fillColor = colors[specie]
         return L.circleMarker(latlng, geojsonMarkerOptions);
       },
@@ -200,7 +200,7 @@ for (let specie in nomeSpecieComuni) {
   var altreSpecie = L.geoJSON(altro, {
     onEachFeature,
     pointToLayer: function (feature, latlng) {
-      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+4; // Marker radius roughly proportional to tree trunk diameter class
+      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+5; // Marker radius roughly proportional to tree trunk diameter class
       geojsonMarkerOptions.fillColor = "#FFFFFF";
       return L.circleMarker(latlng, geojsonMarkerOptions);
     }
