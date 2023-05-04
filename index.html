@@ -4,36 +4,36 @@
   <meta charset="utf-8">
   <title>Mappa alberi Verona</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
-     integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
-     crossorigin=""/>
+  integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+  crossorigin=""/>
   <!-- Make sure you put this AFTER Leaflet's CSS -->
   <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
-    integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
-    crossorigin="">
+  integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+  crossorigin="">
   </script>
   <script src="./tutti_alberi.js"></script>
   <script src="./prova_alberi.js"></script>
   <style>
-	  
-    #map { 
-      height: 600px; 
-    }
-	  
-    .heading {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-    }
 
-    body {
-      font-family: "Verdana";
-    }
-	  
+  #map {
+    height: 600px;
+  }
+
+  .heading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  body {
+    font-family: "Verdana";
+  }
+
   </style>
 </head>
 <body>
-	
+
   <div class="heading">
     <h1> Map of Verona city trees </h1>
     <p>Urban trees in the Municipality of Verona, based on OpenData provided by the Municipality from <a href="https://mapserver6.comune.verona.it/SiGi/M1/IGIS.aspx">SiGi</a></p>
@@ -41,59 +41,59 @@
     <p>Red markers indicate unidentified trees (14th most common tree group).</p>
     <p>Displayed trees are the most common 42 species colored by species, in white all species with less than 50 trees (117 species)</p>
   </div>
-	
+
   <div id="map"></div>
 
   <script>
 
   const nomeSpecieComuni = [
-  'Tilia Europaea',
-  'Platanus Acerifolia',
-  'Cupressus Sempervirens',
-  'Pinus Pinea',
-  'Cedrus Deodara',
-  'Cercis Siliquastrum',
-  'Aesculus Hippocastanum',
-  'Quercus Ilex',
-  'Robinia Pseudoacacia',
-  'Carpinus Betulus',
-  'Liriodendron Tulipifera',
-  'Ginkgo Biloba',
-  'Acer Negundo',
-  '-',
-  'Sophora Japonica',
-  'Ulmus Pumila',
-  'Acer Pseudoplatanus',
-  "Carpinus Betulus 'Pyramidalis'",
-  'Acer Platanoides',
-  'Celtis Australis',
-  'Ulmus Minor',
-  'Tilia Platyphyllos',
-  'Fraxinus Excelsior',
-  'Magnolia Grandiflora',
-  'Ostrya Carpinifolia',
-  "Populus Nigra 'Italica'",
-  'Acer Saccharinum',
-  'Tilia Cordata',
-  'Ulmus Sp',
-  'Cedrus Atlantica',
-  'Tamarix Gallica',
-  'Firmiana Simplex',
-  'Pinus Nigra',
-  'Tilia Tomentosa',
-  'Fraxinus Ornus',
-  "Quercus Robur 'Fastigiata'",
-  'Taxus Baccata',
-  'Olea Europaea',
-  'Prunus Sp',
-  "Cedrus Atlantica 'Glauca'",
-  'Quercus Pedunculata',
-  'Pinus Sp'
+    'Tilia Europaea',
+    'Platanus Acerifolia',
+    'Cupressus Sempervirens',
+    'Pinus Pinea',
+    'Cedrus Deodara',
+    'Cercis Siliquastrum',
+    'Aesculus Hippocastanum',
+    'Quercus Ilex',
+    'Robinia Pseudoacacia',
+    'Carpinus Betulus',
+    'Liriodendron Tulipifera',
+    'Ginkgo Biloba',
+    'Acer Negundo',
+    '-',
+    'Sophora Japonica',
+    'Ulmus Pumila',
+    'Acer Pseudoplatanus',
+    "Carpinus Betulus 'Pyramidalis'",
+    'Acer Platanoides',
+    'Celtis Australis',
+    'Ulmus Minor',
+    'Tilia Platyphyllos',
+    'Fraxinus Excelsior',
+    'Magnolia Grandiflora',
+    'Ostrya Carpinifolia',
+    "Populus Nigra 'Italica'",
+    'Acer Saccharinum',
+    'Tilia Cordata',
+    'Ulmus Sp',
+    'Cedrus Atlantica',
+    'Tamarix Gallica',
+    'Firmiana Simplex',
+    'Pinus Nigra',
+    'Tilia Tomentosa',
+    'Fraxinus Ornus',
+    "Quercus Robur 'Fastigiata'",
+    'Taxus Baccata',
+    'Olea Europaea',
+    'Prunus Sp',
+    "Cedrus Atlantica 'Glauca'",
+    'Quercus Pedunculata',
+    'Pinus Sp'
   ];
 
   var base = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-	subdomains: 'abcd',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
   });
 
   var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -101,15 +101,15 @@
     attribution: '© OpenStreetMap'
   });
 
-// Custom function to bind popup to each marker
+  // Custom function to bind popup to each marker
   function onEachFeature(feature, layer) {
-		let popupContent = `<strong>ID PIANTA:</strong> ${feature.properties.CODICE_PIA}</br><strong>SPECIE:</strong> ${feature.properties.DESCRIZION}</br><strong>DIAMETRO:</strong> ${feature.properties.DIAMETRO_F}`;
-		if (feature.properties && feature.properties.popupContent) {
-			popupContent += feature.properties.popupContent;
-		}
+    let popupContent = `<strong>ID PIANTA:</strong> ${feature.properties.CODICE_PIA}</br><strong>SPECIE:</strong> ${feature.properties.DESCRIZION}</br><strong>DIAMETRO:</strong> ${feature.properties.DIAMETRO_F}`;
+    if (feature.properties && feature.properties.popupContent) {
+      popupContent += feature.properties.popupContent;
+    }
 
-		layer.bindPopup(popupContent);
-	};
+    layer.bindPopup(popupContent);
+  };
 
   var colors = [
     "#31f988",
@@ -165,46 +165,46 @@
     fillOpacity: 0.8
   };
 
-/*
-//Bulk add all trees and filter single species
-// OLD VERSION
+  /*
+  //Bulk add all trees and filter single species
+  // OLD VERSION
   var trees = L.geoJSON(alberi, {
-    filter: function(feature, layer) {
-      return feature.properties.DESCRIZION == nomeSpecieComuni[2];
-    },
-    onEachFeature,
-    pointToLayer: function (feature, latlng) {
-      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+6; // Raggio del cerchio proporzionale alla classe di diametro del tronco
-      return L.circleMarker(latlng, geojsonMarkerOptions);
-    }
-  });
+  filter: function(feature, layer) {
+  return feature.properties.DESCRIZION == nomeSpecieComuni[2];
+},
+onEachFeature,
+pointToLayer: function (feature, latlng) {
+geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+6; // Raggio del cerchio proporzionale alla classe di diametro del tronco
+return L.circleMarker(latlng, geojsonMarkerOptions);
+}
+});
 */
 
 var trees = [];
 
 for (let specie in nomeSpecieComuni) {
-    trees.push(L.geoJSON(alberi, {
-      pointToLayer: function (feature, latlng) {
-        geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+5; // Raggio del cerchio proporzionale alla classe di diametro del tronco
-        geojsonMarkerOptions.fillColor = colors[specie]
-        return L.circleMarker(latlng, geojsonMarkerOptions);
-      },
-      onEachFeature,
-      filter: function (feature, layer) {
-        return feature.properties.DESCRIZION === nomeSpecieComuni[specie];
-      }
-    }));
-  };
+  trees.push(L.geoJSON(alberi, {
+    pointToLayer: function (feature, latlng) {
+      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+5; // Raggio del cerchio proporzionale alla classe di diametro del tronco
+      geojsonMarkerOptions.fillColor = colors[specie]
+      return L.circleMarker(latlng, geojsonMarkerOptions);
+    },
+    onEachFeature,
+    filter: function (feature, layer) {
+      return feature.properties.DESCRIZION === nomeSpecieComuni[specie];
+    }
+  }));
+};
 
 // OTHER species are grouped together in another layer
-  var altreSpecie = L.geoJSON(altro, {
-    onEachFeature,
-    pointToLayer: function (feature, latlng) {
-      geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+5; // Marker radius roughly proportional to tree trunk diameter class
-      geojsonMarkerOptions.fillColor = "#FFFFFF";
-      return L.circleMarker(latlng, geojsonMarkerOptions);
-    }
-  });
+var altreSpecie = L.geoJSON(altro, {
+  onEachFeature,
+  pointToLayer: function (feature, latlng) {
+    geojsonMarkerOptions.radius = feature.properties.DIAMETRO_F+5; // Marker radius roughly proportional to tree trunk diameter class
+    geojsonMarkerOptions.fillColor = "#FFFFFF";
+    return L.circleMarker(latlng, geojsonMarkerOptions);
+  }
+});
 
 // DICTIONARY COMPREHENSION
 var treesDict = {};
@@ -219,20 +219,62 @@ treesDict['Altro'] = altreSpecie;
 // Use layergroup to add them to the map
 var gruppoAlberi = L.layerGroup(trees);
 
-  var map = L.map('map', {
-    center: [45.448, 11],
-    zoom: 12,
-    layers: [base, altreSpecie, gruppoAlberi]
-  });
+var mymap = L.map('map', {
+  center: [45.448, 11],
+  zoom: 12,
+  layers: [base, altreSpecie, gruppoAlberi]
+});
 
-  var baseMaps = {
-    "OpenStreetMap": osm,
-    "CARTODB dark": base
-  }
+var baseMaps = {
+  "OpenStreetMap": osm,
+  "CARTODB dark": base
+}
 
 // Using treesDict as layer controls
-  var layerControl = L.control.layers(baseMaps, treesDict).addTo(map);
+var layerControl = L.control.layers(baseMaps, treesDict).addTo(mymap);
 
-  </script>
+// Parse hash portion of URL
+var hash = window.location.hash.substr(1);
+console.log(hash);
+
+console.log(gruppoAlberi.getLayer(2).getLayer(1).feature.properties.CODICE_PIA);
+// console.log(gruppoAlberi._layers[2]._layers[1].feature.properties.CODICE_PIA)
+var codici_pianta = [];
+
+gruppoAlberi.eachLayer(function(layer) {
+  var marker = layer.getLayers().find(function(trovato) {
+    /*
+    if (marker.feature.properties.CODICE_PIA === hash) {
+      console.log('true')
+    }
+    */
+    return trovato.feature.properties.CODICE_PIA === hash;
+  });
+
+  if (marker) {
+    mymap.setView(marker.getLatLng(), 18);
+    marker.openPopup();
+  }
+});
+
+
+
+
+
+/*
+// Find marker with matching ID
+gruppoAlberi.eachLayer(function(layer) {
+  var marker = layer.getLayers().find(function(l) {
+    return l.feature.properties.CODICE_PIA === hash;
+  });
+
+  if (marker) {
+    mymap.setView(marker.getLatLng(), 13);
+    marker.openPopup();
+  }
+});
+*/
+
+</script>
 </body>
 </html>
