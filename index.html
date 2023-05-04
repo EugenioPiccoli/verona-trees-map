@@ -14,11 +14,11 @@
   <script src="./tutti_alberi.js"></script>
   <script src="./prova_alberi.js"></script>
   <style>
-
-    #map {
-      height: 600px;
+	  
+    #map { 
+      height: 600px; 
     }
-
+	  
     .heading {
       display: flex;
       flex-direction: column;
@@ -29,11 +29,11 @@
     body {
       font-family: "Verdana";
     }
-
+	  
   </style>
 </head>
 <body>
-
+	
   <div class="heading">
     <h1> Map of Verona city trees </h1>
     <p>Urban trees in the Municipality of Verona, based on OpenData provided by the Municipality from <a href="https://mapserver6.comune.verona.it/SiGi/M1/IGIS.aspx">SiGi</a></p>
@@ -41,7 +41,7 @@
     <p>Red markers indicate unidentified trees (14th most common tree group).</p>
     <p>Displayed trees are the most common 42 species colored by species, in white all species with less than 50 trees (117 species)</p>
   </div>
-
+	
   <div id="map"></div>
 
   <script>
@@ -233,23 +233,6 @@ var gruppoAlberi = L.layerGroup(trees);
 // Using treesDict as layer controls
   var layerControl = L.control.layers(baseMaps, treesDict).addTo(map);
 
-  </script>
-
-  <script type="text/javascript">
-  // Parse hash portion of URL
-  var hash = window.location.hash.substr(1);
-
-  // Find marker with matching ID
-  var marker = geojsonLayer.getLayers().find(function(layer) {
-    return layer.feature.properties.CODICE_PIA === hash;
-  });
-
-  // Zoom map to marker
-  if (marker) {
-    mymap.setView(marker.getLatLng(), 13);
-    marker.openPopup();
-  }
-  
   </script>
 </body>
 </html>
